@@ -1,5 +1,11 @@
 let port1;
 let port2;
+let ruch = 2;
+
+// {
+//     topic: "ruch",
+//     data: ruch
+// }
 
 addEventListener('connect', (event) => {
     const port = event.ports[0];
@@ -8,21 +14,17 @@ addEventListener('connect', (event) => {
     port.addEventListener('message', (mes) => {
         switch (mes.data.command){
             case "store_port":
-                if(mes.data.scriptNo == 1) port1=port;
-                else port2=port;
-                break;
-
-            case "get_data":
-                port.postMessage(`Script ${mes.data.scriptNo}`);
-                break;
-
-            case "send_data":
-                if(mes.data.scriptNo == 1){
-                    port2.postMessage(mes.data.text);
+                if(mes.data.scriptNo == 1) {
+                    port1=port;
                 }else{
-                    port1.postMessage(mes.data.text);
+                    port2=port;
                 }
+                port.postMessage({
+                    topic: "ruch",
+                    data: ruch
+                })
                 break;
+
         }
     })
 })

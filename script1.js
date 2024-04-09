@@ -1,4 +1,11 @@
 const worker = new SharedWorker('worker.js')
+let ruch = 0;
+
+// {
+//     scriptNo: ...int
+//     command : ...string
+// }
+
 worker.port.start();
 
 worker.port.postMessage({
@@ -12,8 +19,12 @@ worker.port.postMessage({
 });
 
 worker.port.addEventListener('message', (mes) => {
-    console.log(mes.data);
-	//alert(mes.data);
+    if(mes.data.topic=="ruch"){
+        ruch = mes.data.data;
+    } 
+    
+    console.log(mes.data.data);
+	//alert(mes.data.topic);
 })
 
 function send(){
@@ -25,9 +36,7 @@ function send(){
 }
 
 function draw() {
-    // Utworzenie obiektu klasy Szachownica
     const szachownica = new Szachownica();
-    
 }
 class Pole{
     constructor(x, y, szer, wys, gracz){
@@ -88,10 +97,9 @@ class Szachownica {
         //init
         this.canvas = document.getElementById("plansza");
         var rect = this.canvas.getBoundingClientRect();
-        console.log(rect.x, rect.y)
+        //console.log(rect.x, rect.y)
         
         this.ctx = this.canvas.getContext('2d');
-        console.log(this.ctx.centerX);
         this.color = 255;
         this.liczbaPol = 8; //w rzędzie
         this.bokPola = 70;
@@ -118,24 +126,23 @@ class Szachownica {
 
 
         addEventListener("click", (event) => {
-            const myX = event.clientX;
-            const myY = event.clientY;
-            for (let i = 0; i < this.liczbaPol; i++){
-                for (let j = 0; j < this.liczbaPol; j++){
-                    let p = this.pola[i][j];
-                    let poleX = this.canvas.getBoundingClientRect().x + p.x;
-                    let poleY = this.canvas.getBoundingClientRect().y + p.y;
-                    if((myX>=poleX && myX<=poleX+p.szer) && (myY>=poleY && myY<=poleY+p.wys)){
-                        console.log(i, j);
-                        p.zaznacz();
-                    }else{
-                        p.odznacz();
+            if(ruch == 1){
+                const myX = event.clientX;
+                const myY = event.clientY;
+                for (let i = 0; i < this.liczbaPol; i++){
+                    for (let j = 0; j < this.liczbaPol; j++){
+                        let p = this.pola[i][j];
+                        let poleX = this.canvas.getBoundingClientRect().x + p.x;
+                        let poleY = this.canvas.getBoundingClientRect().y + p.y;
+                        if((myX>=poleX && myX<=poleX+p.szer) && (myY>=poleY && myY<=poleY+p.wys)){
+                            console.log(i, j);
+                            p.zaznacz();
+                        }else{
+                            p.odznacz();
+                        }
                     }
                 }
-            }
-            
-
-            
+            }           
         });
     }
 

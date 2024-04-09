@@ -2,8 +2,12 @@
 <head>
     <title>Window 2</title>
 </head>
-<body>
+<body style="background-color: #858585;" onload="draw()">
     <h1>Window 2</h1>
-    <button onclick="send()">Send data to window 1</button>
+    <!-- <button onclick="send()">Send data to window 1</button> -->
     <script type="text/javascript" src="script2.js"></script>
+
+    <canvas id="plansza" width="400" height="400" style="border:1px solid">
+        <canvas id="stol" width="400" height="400" style="border:1px solid"></canvas>
+    </canvas>
 </body>
